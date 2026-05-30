@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "YTFG7C4624.com.l8er.app",
+        "paths": ["/pin/*", "/open/*", "/*"]
+      }
+    ]
+  }
+}
