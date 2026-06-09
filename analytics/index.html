@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L8er Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0D0A08;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #F5EDE4;
+    min-height: 100vh;
+  }
+
+  .gate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  .gate-card {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .gate-wordmark {
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #E8824A;
+    font-weight: 500;
+    margin-bottom: 40px;
+  }
+
+  .gate-label {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #9C8878;
+    margin-bottom: 20px;
+  }
+
+  .gate-input {
+    width: 100%;
+    background: #1A1208;
+    border: none;
+    outline: none;
+    color: #F5EDE4;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-radius: 0;
+    -webkit-appearance: none;
+  }
+
+  .gate-input::placeholder { color: #5C4A3A; }
+
+  .gate-btn {
+    width: 100%;
+    background: #E8824A;
+    border: none;
+    color: #0D0A08;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 14px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  .gate-btn:hover { background: #d4703a; }
+
+  .gate-error {
+    font-size: 12px;
+    color: #E8824A;
+    margin-top: 12px;
+    font-weight: 300;
+    min-height: 18px;
+  }
+
+  .dashboard { display: none; }
+
+  .dash-header {
+    padding: 40px 48px 32px;
+    border-bottom: 1px solid rgba(156,136,120,0.12);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .dash-wordmark {
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #E8824A;
+    font-weight: 500;
+  }
+
+  .dash-meta {
+    text-align: right;
+  }
+
+  .dash-pin-label {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #9C8878;
+    margin-bottom: 4px;
+  }
+
+  .dash-pin-id {
+    font-size: 13px;
+    font-weight: 300;
+    color: #5C4A3A;
+    font-family: monospace;
+  }
+
+  .dash-body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 56px 48px 80px;
+  }
+
+  .pin-name {
+    font-size: 28px;
+    font-weight: 300;
+    color: #F5EDE4;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .pin-meta-row {
+    font-size: 12px;
+    font-weight: 300;
+    color: #9C8878;
+    letter-spacing: 0.04em;
+    margin-bottom: 56px;
+  }
+
+  .section-eye {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #9C8878;
+    font-weight: 400;
+    margin-bottom: 24px;
+  }
+
+  .funnel {
+    margin-bottom: 56px;
+  }
+
+  .funnel-row {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid rgba(156,136,120,0.1);
+  }
+
+  .funnel-num {
+    font-size: 36px;
+    font-weight: 300;
+    color: #F5EDE4;
+    letter-spacing: -0.03em;
+    min-width: 64px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .funnel-num.loading {
+    color: #2A2018;
+  }
+
+  .funnel-meta { flex: 1; }
+
+  .funnel-label {
+    font-size: 13px;
+    font-weight: 400;
+    color: #F5EDE4;
+    margin-bottom: 3px;
+  }
+
+  .funnel-sub {
+    font-size: 12px;
+    font-weight: 300;
+    color: #9C8878;
+    line-height: 1.5;
+  }
+
+  .funnel-pct {
+    font-size: 12px;
+    font-weight: 300;
+    color: #5C4A3A;
+    min-width: 44px;
+    text-align: right;
+  }
+
+  .climax-wrap { margin: 4px -4px 0; }
+
+  .funnel-row.climax {
+    background: rgba(232,130,74,0.06);
+    border-left: 2px solid #E8824A;
+    border-top: none;
+    padding: 24px 20px;
+    margin-top: 4px;
+  }
+
+  .funnel-row.climax .funnel-num {
+    font-size: 48px;
+    color: #E8824A;
+  }
+
+  .funnel-row.climax .funnel-label { font-size: 14px; }
+
+  .funnel-row.climax .funnel-sub {
+    font-size: 13px;
+    margin-top: 4px;
+    max-width: 380px;
+  }
+
+  .rule {
+    height: 1px;
+    background: rgba(156,136,120,0.12);
+    margin: 48px 0;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: rgba(156,136,120,0.12);
+    margin-bottom: 56px;
+  }
+
+  .stat-cell {
+    background: #0D0A08;
+    padding: 24px 20px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #9C8878;
+    margin-bottom: 10px;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 300;
+    color: #F5EDE4;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-value.accent { color: #E8824A; }
+
+  .stat-value.loading { color: #2A2018; }
+
+  .closing {
+    padding-top: 40px;
+    border-top: 1px solid rgba(156,136,120,0.12);
+  }
+
+  .tagline {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(245,237,228,0.3);
+    line-height: 1.6;
+    letter-spacing: -0.005em;
+  }
+
+  .loading-state {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #5C4A3A;
+    padding: 40px 0;
+  }
+
+  .error-state {
+    font-size: 13px;
+    font-weight: 300;
+    color: #E8824A;
+    padding: 40px 0;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #9C8878;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 48px;
+    display: block;
+  }
+
+  .back-btn:hover { color: #F5EDE4; }
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-wordmark">L8er</div>
+    <div class="gate-label">Campaign Analytics</div>
+    <input class="gate-input" type="password" id="passInput" placeholder="Access code" />
+    <input class="gate-input" type="text" id="pinInput" placeholder="Pin ID" />
+    <button class="gate-btn" onclick="authenticate()">View campaign</button>
+    <div class="gate-error" id="gateError"></div>
+  </div>
+</div>
+
+<div class="dashboard" id="dashboard">
+  <div class="dash-header">
+    <div class="dash-wordmark">L8er</div>
+    <div class="dash-meta">
+      <div class="dash-pin-label">Campaign</div>
+      <div class="dash-pin-id" id="headerPinId"></div>
+    </div>
+  </div>
+  <div class="dash-body">
+    <button class="back-btn" onclick="goBack()">← New campaign</button>
+    <div id="dashContent"></div>
+  </div>
+</div>
+
+<script>
+  const ACCESS_CODE = 'AIzaSyB7Vo_R-Bmtb17Un6ullBNxpWKA3YnA48A';
+
+  const FIREBASE_PROJECT = 'l8er-ed833';
+  const FIREBASE_API_KEY = 'AIzaSyB7Vo_R-Bmtb17Un6ullBNxpWKA3YnA48A';
+
+  const EVENT_CONFIG = [
+    { event: 'link_tapped',      label: 'Link taps',        sub: 'Your audience saw it. They clicked.' },
+    { event: 'pin_saved',        label: 'Pins saved',       sub: 'Intent captured. They marked the spot.' },
+    { event: 'arrival',          label: 'Arrivals',         sub: 'GPS-confirmed. They came to you.' },
+    { event: 'intent_confirmed', label: 'Chose to unlock',  sub: 'Tapped to enter. Ready to receive.' },
+    { event: 'unlocked',         label: 'Unlocks',          sub: 'Video played. Moment delivered.' },
+    { event: 'redemption_viewed',label: 'Redemptions',      sub: 'Verified, physical conversions inside your space.' },
+  ];
+
+  function authenticate() {
+    const pass = document.getElementById('passInput').value.trim();
+    const pinId = document.getElementById('pinInput').value.trim();
+    const err = document.getElementById('gateError');
+
+    if (pass !== ACCESS_CODE) {
+      err.textContent = 'Incorrect access code.';
+      return;
+    }
+    if (!pinId) {
+      err.textContent = 'Enter a pin ID.';
+      return;
+    }
+
+    err.textContent = '';
+    loadDashboard(pinId);
+  }
+
+  document.getElementById('passInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('pinInput').focus(); });
+  document.getElementById('pinInput').addEventListener('keydown', e => { if (e.key === 'Enter') authenticate(); });
+
+  async function loadDashboard(pinId) {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('headerPinId').textContent = pinId;
+
+    const content = document.getElementById('dashContent');
+    content.innerHTML = '<div class="loading-state">Loading campaign data</div>';
+
+    try {
+      const pinData = await fetchPin(pinId);
+      const analytics = await fetchAnalytics(pinId);
+      renderDashboard(pinId, pinData, analytics, content);
+    } catch (e) {
+      content.innerHTML = '<div class="error-state">Unable to load campaign data. Check the pin ID and try again.</div>';
+    }
+  }
+
+  async function fetchPin(pinId) {
+    const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT}/databases/(default)/documents/pins/${pinId}?key=${FIREBASE_API_KEY}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Pin not found');
+    const data = await res.json();
+    return parseFirestoreDoc(data);
+  }
+
+  async function fetchAnalytics(pinId) {
+    const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT}/databases/(default)/documents/pins/${pinId}/analytics?pageSize=1000&key=${FIREBASE_API_KEY}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Analytics not found');
+    const data = await res.json();
+    const docs = data.documents || [];
+    return docs.map(d => parseFirestoreDoc(d));
+  }
+
+  function parseFirestoreDoc(doc) {
+    const fields = doc.fields || {};
+    const result = {};
+    for (const [key, val] of Object.entries(fields)) {
+      if (val.stringValue !== undefined) result[key] = val.stringValue;
+      else if (val.booleanValue !== undefined) result[key] = val.booleanValue;
+      else if (val.integerValue !== undefined) result[key] = parseInt(val.integerValue);
+      else if (val.doubleValue !== undefined) result[key] = val.doubleValue;
+      else if (val.timestampValue !== undefined) result[key] = val.timestampValue;
+    }
+    return result;
+  }
+
+  function countEvents(analytics, eventName) {
+    return analytics.filter(a => a.event === eventName).length;
+  }
+
+  function pct(num, denom) {
+    if (!denom) return '';
+    return Math.round((num / denom) * 100) + '%';
+  }
+
+  function formatDate(ts) {
+    if (!ts) return '';
+    try {
+      return new Date(ts).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    } catch { return ''; }
+  }
+
+  function renderDashboard(pinId, pin, analytics, container) {
+    const counts = {};
+    EVENT_CONFIG.forEach(c => { counts[c.event] = countEvents(analytics, c.event); });
+
+    const linkTaps = counts['link_tapped'];
+    const redemptions = counts['redemption_viewed'];
+    const conversionRate = linkTaps ? Math.round((redemptions / linkTaps) * 100) : 0;
+    const createdDate = formatDate(pin.createdAt);
+
+    let html = `
+      <div class="pin-name">${pin.locationName || pin.userName || 'Campaign'}</div>
+      <div class="pin-meta-row">${createdDate ? 'Created ' + createdDate + ' &nbsp;·&nbsp; ' : ''}Pin ${pinId.slice(0,8)}...</div>
+
+      <div class="section-eye">Funnel</div>
+      <div class="funnel">
+    `;
+
+    const mainEvents = EVENT_CONFIG.slice(0, 5);
+    mainEvents.forEach((cfg, i) => {
+      const count = counts[cfg.event];
+      const prevCount = i > 0 ? counts[EVENT_CONFIG[i-1].event] : null;
+      const pctStr = prevCount ? pct(count, prevCount) : '';
+      html += `
+        <div class="funnel-row">
+          <div class="funnel-num">${count}</div>
+          <div class="funnel-meta">
+            <div class="funnel-label">${cfg.label}</div>
+            <div class="funnel-sub">${cfg.sub}</div>
+          </div>
+          <div class="funnel-pct">${pctStr}</div>
+        </div>
+      `;
+    });
+
+    const redemptionCount = counts['redemption_viewed'];
+    const prevCount = counts['unlocked'];
+    const redemptionPct = prevCount ? pct(redemptionCount, prevCount) : '';
+
+    html += `
+      </div>
+      <div class="climax-wrap">
+        <div class="funnel-row climax">
+          <div class="funnel-num">${redemptionCount}</div>
+          <div class="funnel-meta">
+            <div class="funnel-label">Redemptions viewed</div>
+            <div class="funnel-sub">Verified, physical conversions inside your space. Not views. Not reach. People who showed up.</div>
+          </div>
+          <div class="funnel-pct" style="color:#E8824A">${redemptionPct}</div>
+        </div>
+      </div>
+
+      <div class="rule"></div>
+
+      <div class="section-eye">Summary</div>
+      <div class="stat-grid">
+        <div class="stat-cell">
+          <div class="stat-label">Link taps</div>
+          <div class="stat-value">${linkTaps}</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Redemptions</div>
+          <div class="stat-value accent">${redemptions}</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Conversion</div>
+          <div class="stat-value accent">${conversionRate}%</div>
+        </div>
+      </div>
+
+      <div class="closing">
+        <div class="tagline">Every other platform tells you how many people saw it.<br>We tell you how many showed up.</div>
+      </div>
+    `;
+
+    container.innerHTML = html;
+  }
+
+  function goBack() {
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('gate').style.display = 'flex';
+    document.getElementById('pinInput').value = '';
+    document.getElementById('passInput').value = '';
+    document.getElementById('dashContent').innerHTML = '';
+  }
+</script>
+</body>
+</html>
