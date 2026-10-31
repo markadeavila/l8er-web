@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>
+    // GitHub Pages serves this file for every missing path. Only /pin/ links
+    // get the memory page; everything else goes home. The pin ID is never read.
+    if (location.pathname.indexOf('/pin/') !== 0) {
+      document.documentElement.style.display = 'none';
+      location.replace('/');
+    }
+  </script>
+  <title>L8er</title>
+  <meta name="description" content="Someone left you a memory. It only opens where it was left." />
+  <meta property="og:title" content="Someone left you a memory." />
+  <meta property="og:description" content="It only opens where it was left." />
+  <meta property="og:site_name" content="L8er" />
+  <meta name="theme-color" content="#0D0A08" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0D0A08;
+      --cream: #F5EDE4;
+      --muted: #9C8878;
+      --faint: rgba(156, 136, 120, 0.5);
+      --accent: #E8824A;
+      --line: rgba(245, 237, 228, 0.14);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { background: var(--bg); }
+    body {
+      color: var(--cream);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 28px calc(48px + env(safe-area-inset-bottom));
+      text-align: center;
+      -webkit-font-smoothing: antialiased;
+    }
+    main {
+      width: 100%;
+      max-width: 340px;
+      animation: fade 900ms ease-out both;
+    }
+    @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { main { animation: none; } }
+
+    .mark {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(232, 130, 74, 0.12), 0 0 36px rgba(232, 130, 74, 0.55);
+      margin: 0 auto 40px;
+    }
+    h1 {
+      font-size: 30px;
+      font-weight: 300;
+      line-height: 1.25;
+      letter-spacing: -0.2px;
+      margin-bottom: 16px;
+    }
+    .lede {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-bottom: 44px;
+    }
+
+    /* One block per device. Without JS, the iPhone block shows. */
+    .device { display: none; }
+    body:not([data-device]) .device-ios,
+    body[data-device="ios"] .device-ios,
+    body[data-device="android"] .device-android,
+    body[data-device="computer"] .device-computer { display: block; }
+
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 17px 44px;
+      border: 0;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 0 40px rgba(232, 130, 74, 0.35);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.6; cursor: default; }
+    .note {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-top: 22px;
+    }
+    .heading {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .device-android .note, .device-computer .note { margin-top: 0; }
+
+    form { margin-top: 24px; }
+    input[type="email"] {
+      width: 100%;
+      background: transparent;
+      color: var(--cream);
+      font-family: inherit;
+      font-size: 16px;
+      padding: 15px 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      outline: none;
+      text-align: center;
+      margin-bottom: 14px;
+      -webkit-appearance: none;
+    }
+    input[type="email"]::placeholder { color: var(--faint); }
+    input[type="email"]:focus { border-color: var(--accent); }
+    input[aria-invalid="true"] { border-color: var(--accent); }
+    form .btn { width: 100%; }
+    .msg {
+      min-height: 22px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--accent);
+      margin-top: 14px;
+    }
+    .thanks {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--cream);
+      margin-top: 24px;
+    }
+
+    footer {
+      margin-top: 64px;
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--faint);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="mark" aria-hidden="true"></div>
+    <h1>Someone left you a memory.</h1>
+    <p class="lede">It only opens where it was left. When you're standing there, it's yours.</p>
+
+    <section class="device device-ios">
+      <a class="btn" href="https://testflight.apple.com/join/PCUrw5xD">Get L8er</a>
+      <p class="note">Once L8er is installed, tap the original link again to open the memory.</p>
+    </section>
+
+    <section class="device device-android">
+      <p class="heading">L8er is coming to Android</p>
+      <p class="note">Leave your email and we'll tell you when it's ready.</p>
+      <form id="notify" novalidate>
+        <label for="email" style="position:absolute;left:-9999px">Email</label>
+        <input id="email" name="email" type="email" inputmode="email" autocomplete="email"
+               autocapitalize="off" spellcheck="false" placeholder="you@example.com" required />
+        <button class="btn" type="submit">Notify me</button>
+        <p class="msg" id="msg" role="status" aria-live="polite"></p>
+      </form>
+      <p class="thanks" id="thanks" hidden>Thanks. We'll let you know.</p>
+    </section>
+
+    <section class="device device-computer">
+      <p class="note">Open this link on your iPhone.</p>
+    </section>
+
+    <footer>L8er</footer>
+  </main>
+
+  <script>
+    (function () {
+      // Pick the device block. ?view=iphone|android|computer forces one (for previewing).
+      var ua = navigator.userAgent || '';
+      var forced = (new URLSearchParams(location.search).get('view') || '').toLowerCase();
+      var isIOS = /iPhone|iPad|iPod/.test(ua) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPadOS reports as Mac
+      var device = isIOS ? 'ios' : /Android/i.test(ua) ? 'android' : 'computer';
+      if (forced === 'iphone' || forced === 'ipad' || forced === 'ios') device = 'ios';
+      else if (forced === 'android') device = 'android';
+      else if (forced === 'computer' || forced === 'desktop') device = 'computer';
+      document.body.setAttribute('data-device', device);
+
+      // Android signup: posts to the Google Form in the background.
+      var FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeWPfaGa-Y45mpdtJfQr0lkurMLkBGHbqrC6Uu22w_ZtokhDQ/formResponse';
+      var EMAIL_FIELD = 'entry.220607689';
+      var form = document.getElementById('notify');
+      var input = document.getElementById('email');
+      var msg = document.getElementById('msg');
+      var thanks = document.getElementById('thanks');
+      var button = form.querySelector('button');
+
+      input.addEventListener('input', function () {
+        input.removeAttribute('aria-invalid');
+        msg.textContent = '';
+      });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var email = input.value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+          input.setAttribute('aria-invalid', 'true');
+          msg.textContent = 'Please enter a valid email.';
+          input.focus();
+          return;
+        }
+        button.disabled = true;
+        button.textContent = 'Sending';
+        var body = new URLSearchParams();
+        body.append(EMAIL_FIELD, email);
+        // Google Forms doesn't allow reading the response (no-cors), so a
+        // resolved request counts as sent; only a network failure is an error.
+        fetch(FORM_URL, { method: 'POST', mode: 'no-cors', body: body })
+          .then(function () {
+            form.hidden = true;
+            thanks.hidden = false;
+          })
+          .catch(function () {
+            button.disabled = false;
+            button.textContent = 'Notify me';
+            msg.textContent = "Couldn't send that. Please try again.";
+          });
+      });
+    })();
+  </script>
+</body>
+</html>
